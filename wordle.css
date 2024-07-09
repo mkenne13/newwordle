@@ -2,21 +2,16 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    box-sizing: border-box;
 }
 
 #container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
-    width: 100%;
-    max-width: 600px;
-    box-sizing: border-box;
 }
 
 .game-title {
@@ -24,18 +19,16 @@ body {
     font-size: 24px;
     font-weight: bold;
     color: #333;
-    text-align: center;
 }
 
 .board {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(6, 60px);
     gap: 5px;
     margin-bottom: 20px;
     border: 2px solid #333;
     background-color: #fff;
-    width: 100%;
-    max-width: 300px;
 }
 
 .cell {
@@ -46,23 +39,19 @@ body {
     font-weight: bold;
     color: #333;
     background-color: #ddd;
-    height: 60px;
 }
 
 .guess-container {
     text-align: center;
     margin-top: 10px;
-    width: 100%;
 }
 
 #guess-input {
-    width: 100%;
-    max-width: 200px;
+    width: 200px;
     height: 30px;
     font-size: 18px;
     text-transform: uppercase;
     text-align: center;
-    box-sizing: border-box;
 }
 
 #error-message {
@@ -70,11 +59,10 @@ body {
     font-size: 14px;
     font-style: italic;
     visibility: hidden;
-    text-align: center;
 }
 
 button {
-    margin-top: 10px;
+    margin-left: 10px;
     padding: 5px 10px;
     font-size: 16px;
 }
@@ -83,7 +71,6 @@ button {
     display: grid;
     gap: 10px;
     margin-top: 20px;
-    width: 100%;
 }
 
 .row {
@@ -128,34 +115,4 @@ button {
     margin-top: 10px;
     font-size: 18px;
     font-weight: bold;
-    text-align: center;
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .game-title {
-        font-size: 20px;
-    }
-
-    .cell {
-        font-size: 20px;
-        height: 50px;
-    }
-
-    #guess-input {
-        font-size: 16px;
-    }
-
-    button {
-        font-size: 14px;
-    }
-
-    .key {
-        font-size: 16px;
-        padding: 8px 12px;
-    }
-
-    .average-guesses {
-        font-size: 16px;
-    }
 }
