@@ -2,24 +2,33 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; 
     margin: 0;
+    padding: 20px; 
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
+    overflow-x: hidden; 
 }
 
 #container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 90vh; 
+    padding: 20px; 
+    width: 100%; 
+    max-width: 600px; 
+    box-sizing: border-box; 
 }
 
 .game-title {
     margin: 20px 0;
-    font-size: 5vw; /* Adjust font size using viewport width units */
+    font-size: 5vw;
     font-weight: bold;
     color: #333;
-    text-align: center; /* Center align the title */
+    text-align: center;
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
 .board {
@@ -30,6 +39,8 @@ body {
     margin-bottom: 20px;
     border: 2px solid #333;
     background-color: #fff;
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
 .cell {
@@ -121,20 +132,20 @@ button {
 /* Media Query for Responsive Design */
 @media screen and (max-width: 600px) {
     .game-title {
-        font-size: 8vw; /* Adjust font size for smaller screens */
+        font-size: 8vw; 
     }
 
     .board {
-        grid-template-columns: repeat(5, 50px); /* Adjust grid columns */
+        grid-template-columns: repeat(5, 50px); 
         grid-template-rows: repeat(6, 50px);
     }
 
     .cell {
-        font-size: 20px; /* Adjust font size for smaller cells */
+        font-size: 20px; 
     }
 
     #guess-input {
-        width: 150px; /* Adjust input width for smaller screens */
-        font-size: 16px; /* Adjust font size for smaller screens */
+        width: 150px; 
+        font-size: 16px;
     }
 }
