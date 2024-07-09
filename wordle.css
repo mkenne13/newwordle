@@ -2,7 +2,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; 
+    min-height: 100vh;
     margin: 0;
     padding: 20px;
     font-family: Arial, sans-serif;
@@ -15,20 +15,20 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 90vh;
-    padding: 20px; /* Add padding for spacing */
-    width: 100%; /* Ensure container stretches to full width */
-    max-width: 600px; /* Limit maximum width for readability */
-    box-sizing: border-box; /* Include padding in width calculation */
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
 }
 
 .game-title {
     margin: 20px 0;
-    font-size: 5vw; /* Adjust font size using viewport width units */
+    font-size: 5vw;
     font-weight: bold;
     color: #333;
-    text-align: center; /* Center align the title */
-    width: 100%; /* Ensure title stretches to full width */
-    box-sizing: border-box; /* Include padding in width calculation */
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .board {
@@ -39,8 +39,8 @@ body {
     margin-bottom: 20px;
     border: 2px solid #333;
     background-color: #fff;
-    width: 100%; /* Ensure board stretches to full width */
-    box-sizing: border-box; /* Include padding in width calculation */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .cell {
@@ -79,73 +79,28 @@ button {
     font-size: 16px;
 }
 
-.keyboard {
-    display: grid;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.row {
-    display: flex;
-    justify-content: center;
-}
-
-.key {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px 15px;
-    margin: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.key:hover {
-    background-color: #e0e0e0;
-}
-
-.key:active {
-    background-color: #ccc;
-}
-
-.correct {
-    background-color: #4CAF50;
-    color: #fff;
-}
-
-.wrong-place {
-    background-color: #FFC107;
-}
-
-.not-in-word {
-    background-color: gray;
-    color: #fff;
-}
-
 .average-guesses {
     margin-top: 10px;
     font-size: 18px;
     font-weight: bold;
 }
 
-/* Media Query for Responsive Design */
 @media screen and (max-width: 600px) {
     .game-title {
-        font-size: 8vw; /* Adjust font size for smaller screens */
+        font-size: 8vw;
     }
 
     .board {
-        grid-template-columns: repeat(5, 50px); /* Adjust grid columns */
+        grid-template-columns: repeat(5, 50px);
         grid-template-rows: repeat(6, 50px);
     }
 
     .cell {
-        font-size: 20px; /* Adjust font size for smaller cells */
+        font-size: 20px;
     }
 
     #guess-input {
-        width: 150px; /* Adjust input width for smaller screens */
-        font-size: 16px; /* Adjust font size for smaller screens */
+        width: 150px;
+        font-size: 16px;
     }
 }
