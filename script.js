@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function createRow() {
         for (let i = 0; i < 5; i++) {
             let cell = document.createElement('div');
-            cell.className = cell position-${i} row-${currentRow};
+            cell.className = `cell position-${i} row-${currentRow}`;
             board.appendChild(cell);
         }
         currentRow++;
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const placeWordInRow = (guess, row) => {
         for (let i = 0; i < 5; i++) {
-            const cell = document.querySelector(.row-${row}.position-${i});
+            const cell = document.querySelector(`.row-${row}.position-${i}`);
             cell.textContent = guess[i];
         }
         updateKeyboardColors(guess); // Update keyboard colors after placing word
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const targetLetterCount = {};
         for (let i = 0; i < 5; i++) {
             if (targetWordArray[i] === guessArray[i]) {
-                const cell = document.querySelector(.row-${row}.position-${i});
+                const cell = document.querySelector(`.row-${row}.position-${i}`);
                 cell.classList.add('correct');
                 targetWordArray[i] = null;
                 guessArray[i] = null;
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         for (let i = 0; i < 5; i++) {
-            const cell = document.querySelector(.row-${row}.position-${i});
+            const cell = document.querySelector(`.row-${row}.position-${i}`);
             if (guessArray[i] !== null) {
                 if (targetLetterCount[guessArray[i]]) {
                     cell.classList.add('wrong-place');
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkWin = guess => guess === targetWord;
 
     const displayAnswer = () => {
-        alert(You win! The word was ${targetWord});
+        alert(`You win! The word was ${targetWord}`);
     };
 
     const getLetterStatus = (letter, position, currentGuess) => {
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const checkWordAPI = async (word) => {
-        const url = https://api.datamuse.com/words?sp=${word}&max=1; // Datamuse API endpoint for word lookup
+        const url = `https://api.datamuse.com/words?sp=${word}&max=1`; // Datamuse API endpoint for word lookup
 
         try {
             const response = await fetch(url);
@@ -205,11 +205,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    submitButton.addEventListener('click', () => {
+    submitButton.addEventListener('click', async () => {
         const currentGuess = guessInput.value.toUpperCase();
         if (!validateGuess(currentGuess)) {
             return;
         }
+
+        const isValidWord = await checkWordAPI(currentGuess.toLowerCase());
+        if (!isValidWord) {
+            errorMessage.textContent = 'Invalid word, please try again.';
+            errorMessage.style.visibility = 'visible';
+            return;
+        }
+
+        errorMessage.style.visibility = 'hidden';
         placeWordInRow(currentGuess, currentRow);
         shadeLetters(currentGuess, currentRow);
         updateKeyboardColors(); // Update keyboard colors after processing the guess
@@ -240,9 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getCookie(name) {
-        let nameEQ = name + "=";
-        let ca = document.cookie.split(';');
-        for(let i = 0; i < ca.length; i++) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
             let c = ca[i];
             while (c.charAt(0) === ' ') c = c.substring(1, c.length);
             if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
@@ -250,26 +259,35 @@ document.addEventListener('DOMContentLoaded', function() {
         return null;
     }
 
+    function eraseCookie(name) {
+        document.cookie = name + '=; Max-Age=-99999999;';
+    }
+
     function updateAverageGuesses(guessCount) {
-        let gameCount = parseInt(getCookie('gameCount')) || 0;
         let totalGuesses = parseInt(getCookie('totalGuesses')) || 0;
+        let gameCount = parseInt(getCookie('gameCount')) || 0;
 
-        gameCount++;
         totalGuesses += guessCount;
+        gameCount++;
 
-        let averageGuesses = (totalGuesses / gameCount).toFixed(2);
+        const averageGuesses = totalGuesses / gameCount;
 
-        setCookie('gameCount', gameCount, 30);
         setCookie('totalGuesses', totalGuesses, 30);
-        setCookie('averageGuesses', averageGuesses, 30);
-
-        document.getElementById('average-guesses-value').textContent = averageGuesses;
+        setCookie('gameCount', gameCount, 30);
+        document.getElementById('average-guesses').innerText = `Average Guesses: ${averageGuesses.toFixed(2)}`;
     }
 
     function displayAverageGuesses() {
-        const averageGuesses = getCookie('averageGuesses') || '0.00';
-        document.getElementById('average-guesses-value').textContent = averageGuesses;
+        let totalGuesses = parseInt(getCookie('totalGuesses')) || 0;
+        let gameCount = parseInt(getCookie('gameCount')) || 0;
+
+        if (gameCount === 0) {
+            document.getElementById('average-guesses').innerText = 'Average Guesses: N/A';
+        } else {
+            const averageGuesses = totalGuesses / gameCount;
+            document.getElementById('average-guesses').innerText = `Average Guesses: ${averageGuesses.toFixed(2)}`;
+        }
     }
 
-    initializeGame();
+    initializeGame(); // Call to initialize the game when the DOM is loaded
 });
