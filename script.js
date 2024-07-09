@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function createRow() {
         for (let i = 0; i < 5; i++) {
             let cell = document.createElement('div');
-            cell.className = `cell position-${i} row-${currentRow}`;
+            cell.className = cell position-${i} row-${currentRow};
             board.appendChild(cell);
         }
         currentRow++;
@@ -100,81 +100,176 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < 6; i++) {
             createRow();
         }
+        currentRow = 0;
+    }
+
+    const validateGuess = guess => {
+        if (guess.length !== 5) {
+            errorMessage.textContent = 'Please enter a 5-letter word.';
+            errorMessage.style.visibility = 'visible';
+            return false;
+        }
+        errorMessage.style.visibility = 'hidden';
+        return true;
+    };
+
+    const placeWordInRow = (guess, row) => {
+        for (let i = 0; i < 5; i++) {
+            const cell = document.querySelector(.row-${row}.position-${i});
+            cell.textContent = guess[i];
+        }
+        updateKeyboardColors(guess); // Update keyboard colors after placing word
+    };
+
+    const shadeLetters = (guess, row) => {
+        const targetWordArray = targetWord.split('');
+        const guessArray = guess.split('');
+        const targetLetterCount = {};
+        for (let i = 0; i < 5; i++) {
+            if (targetWordArray[i] === guessArray[i]) {
+                const cell = document.querySelector(.row-${row}.position-${i});
+                cell.classList.add('correct');
+                targetWordArray[i] = null;
+                guessArray[i] = null;
+            } else {
+                targetLetterCount[targetWordArray[i]] = (targetLetterCount[targetWordArray[i]] || 0) + 1;
+            }
+        }
+        for (let i = 0; i < 5; i++) {
+            const cell = document.querySelector(.row-${row}.position-${i});
+            if (guessArray[i] !== null) {
+                if (targetLetterCount[guessArray[i]]) {
+                    cell.classList.add('wrong-place');
+                    targetLetterCount[guessArray[i]]--;
+                } else {
+                    cell.classList.add('not-in-word');
+                }
+            }
+        }
+        updateKeyboardColors(guess); // Update keyboard colors after shading letters
+    };
+
+    const checkWin = guess => guess === targetWord;
+
+    const displayAnswer = () => {
+        alert(You win! The word was ${targetWord});
+    };
+
+    const getLetterStatus = (letter, position, currentGuess) => {
+        const targetWordArray = targetWord.split('');
+        const guessArray = currentGuess.split('');
+
+        if (guessArray[position] === letter && targetWordArray[position] === letter) {
+            return 'correct';
+        } else if (targetWordArray.includes(letter) && !guessArray.includes(letter)) {
+            return 'not-in-word';
+        } else if (targetWordArray.includes(letter) && guessArray[position] !== letter) {
+            return 'wrong-place';
+        } else {
+            return '';
+        }
+    };
+
+    const updateKeyboardColors = () => {
+        const keys = keyboard.querySelectorAll('.key');
+        const currentGuess = guessInput.value.toUpperCase();
+
+        keys.forEach((key, index) => {
+            const letter = key.textContent;
+            const status = getLetterStatus(letter, index, currentGuess);
+            key.classList.remove('gray', 'green', 'yellow');
+
+            if (status === 'correct') {
+                key.classList.add('green');
+            } else if (status === 'wrong-place') {
+                key.classList.add('yellow');
+            } else if (status === 'not-in-word') {
+                key.classList.add('gray');
+            }
+        });
+    };
+
+    const checkWordAPI = async (word) => {
+        const url = https://api.datamuse.com/words?sp=${word}&max=1; // Datamuse API endpoint for word lookup
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data.length > 0; // Check if the API returns any results for the given word
+        } catch (error) {
+            console.error('Error checking word validity:', error);
+            return false; // Handle error case
+        }
+    };
+
+    submitButton.addEventListener('click', () => {
+        const currentGuess = guessInput.value.toUpperCase();
+        if (!validateGuess(currentGuess)) {
+            return;
+        }
+        placeWordInRow(currentGuess, currentRow);
+        shadeLetters(currentGuess, currentRow);
+        updateKeyboardColors(); // Update keyboard colors after processing the guess
+
+        guessCount++;
+
+        if (checkWin(currentGuess)) {
+            displayAnswer();
+            updateAverageGuesses(guessCount);
+            return;
+        }
+        if (currentRow < 5) {
+            currentRow++;
+        } else {
+            displayAnswer();
+        }
+        guessInput.value = '';
+    });
+
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            let date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        let nameEQ = name + "=";
+        let ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function updateAverageGuesses(guessCount) {
+        let gameCount = parseInt(getCookie('gameCount')) || 0;
+        let totalGuesses = parseInt(getCookie('totalGuesses')) || 0;
+
+        gameCount++;
+        totalGuesses += guessCount;
+
+        let averageGuesses = (totalGuesses / gameCount).toFixed(2);
+
+        setCookie('gameCount', gameCount, 30);
+        setCookie('totalGuesses', totalGuesses, 30);
+        setCookie('averageGuesses', averageGuesses, 30);
+
+        document.getElementById('average-guesses-value').textContent = averageGuesses;
     }
 
     function displayAverageGuesses() {
-        const averageGuessesElement = document.getElementById('average-guesses-value');
-        const averageGuesses = calculateAverageGuesses();
-        averageGuessesElement.textContent = averageGuesses.toFixed(2);
+        const averageGuesses = getCookie('averageGuesses') || '0.00';
+        document.getElementById('average-guesses-value').textContent = averageGuesses;
     }
-
-    function calculateAverageGuesses() {
-        const guesses = JSON.parse(localStorage.getItem('guesses')) || [];
-        const totalGuesses = guesses.reduce((total, guess) => total + guess, 0);
-        return guesses.length ? totalGuesses / guesses.length : 0;
-    }
-
-    function updateAverageGuesses(newGuesses) {
-        const guesses = JSON.parse(localStorage.getItem('guesses')) || [];
-        guesses.push(newGuesses);
-        localStorage.setItem('guesses', JSON.stringify(guesses));
-    }
-
-    function checkGuess(guess) {
-        if (guess.length !== 5) {
-            showErrorMessage('Guess must be a 5-letter word.');
-            return;
-        }
-
-        if (!gameSettings.wordList.includes(guess.toLowerCase())) {
-            showErrorMessage('Invalid word.');
-            return;
-        }
-
-        updateBoard(guess);
-    }
-
-    function updateBoard(guess) {
-        const rowCells = document.querySelectorAll(`.row-${guessCount}`);
-        guess.split('').forEach((letter, index) => {
-            const cell = rowCells[index];
-            cell.textContent = letter;
-
-            if (letter === targetWord[index]) {
-                cell.classList.add('correct');
-            } else if (targetWord.includes(letter)) {
-                cell.classList.add('wrong-place');
-            } else {
-                cell.classList.add('not-in-word');
-            }
-        });
-
-        guessCount++;
-        if (guess === targetWord) {
-            showErrorMessage('Congratulations! You guessed the word!', false);
-            updateAverageGuesses(guessCount);
-            displayAverageGuesses();
-            return;
-        }
-
-        if (guessCount === 6) {
-            showErrorMessage(`Game over! The word was ${targetWord}.`);
-            return;
-        }
-
-        guessInput.value = '';
-        guessInput.focus();
-    }
-
-    function showErrorMessage(message, show = true) {
-        errorMessage.textContent = message;
-        errorMessage.style.visibility = show ? 'visible' : 'hidden';
-    }
-
-    submitButton.addEventListener('click', () => {
-        const guess = guessInput.value.toUpperCase();
-        checkGuess(guess);
-    });
 
     initializeGame();
 });
