@@ -16,9 +16,10 @@ body {
 
 .game-title {
     margin: 20px 0;
-    font-size: 24px;
+    font-size: 5vw; /* Adjust font size using viewport width units */
     font-weight: bold;
     color: #333;
+    text-align: center; /* Center align the title */
 }
 
 .board {
@@ -115,4 +116,25 @@ button {
     margin-top: 10px;
     font-size: 18px;
     font-weight: bold;
+}
+
+/* Media Query for Responsive Design */
+@media screen and (max-width: 600px) {
+    .game-title {
+        font-size: 8vw; /* Adjust font size for smaller screens */
+    }
+
+    .board {
+        grid-template-columns: repeat(5, 50px); /* Adjust grid columns */
+        grid-template-rows: repeat(6, 50px);
+    }
+
+    .cell {
+        font-size: 20px; /* Adjust font size for smaller cells */
+    }
+
+    #guess-input {
+        width: 150px; /* Adjust input width for smaller screens */
+        font-size: 16px; /* Adjust font size for smaller screens */
+    }
 }
