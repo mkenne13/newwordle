@@ -4,31 +4,31 @@ body {
     align-items: center;
     min-height: 100vh; 
     margin: 0;
-    padding: 20px; 
+    padding: 20px;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    overflow-x: hidden; 
+    overflow-x: hidden;
 }
 
 #container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 90vh; 
-    padding: 20px; 
-    width: 100%; 
-    max-width: 600px; 
-    box-sizing: border-box; 
+    min-height: 90vh;
+    padding: 20px; /* Add padding for spacing */
+    width: 100%; /* Ensure container stretches to full width */
+    max-width: 600px; /* Limit maximum width for readability */
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .game-title {
     margin: 20px 0;
-    font-size: 5vw;
+    font-size: 5vw; /* Adjust font size using viewport width units */
     font-weight: bold;
     color: #333;
-    text-align: center;
-    width: 100%; 
-    box-sizing: border-box; 
+    text-align: center; /* Center align the title */
+    width: 100%; /* Ensure title stretches to full width */
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .board {
@@ -39,8 +39,8 @@ body {
     margin-bottom: 20px;
     border: 2px solid #333;
     background-color: #fff;
-    width: 100%; 
-    box-sizing: border-box; 
+    width: 100%; /* Ensure board stretches to full width */
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .cell {
@@ -132,20 +132,20 @@ button {
 /* Media Query for Responsive Design */
 @media screen and (max-width: 600px) {
     .game-title {
-        font-size: 8vw; 
+        font-size: 8vw; /* Adjust font size for smaller screens */
     }
 
     .board {
-        grid-template-columns: repeat(5, 50px); 
+        grid-template-columns: repeat(5, 50px); /* Adjust grid columns */
         grid-template-rows: repeat(6, 50px);
     }
 
     .cell {
-        font-size: 20px; 
+        font-size: 20px; /* Adjust font size for smaller cells */
     }
 
     #guess-input {
-        width: 150px; 
-        font-size: 16px;
+        width: 150px; /* Adjust input width for smaller screens */
+        font-size: 16px; /* Adjust font size for smaller screens */
     }
 }
