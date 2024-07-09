@@ -87,14 +87,14 @@ document.addEventListener('DOMContentLoaded', function() {
         displayAverageGuesses(); // Display average guesses on page load
     }
 
-    function createRow() {
-        for (let i = 0; i < 5; i++) {
-            let cell = document.createElement('div');
-            cell.className = `cell position-${i} row-${currentRow}`;
-            board.appendChild(cell);
-        }
-        currentRow++;
+function createRow() {
+    for (let i = 0; i < 5; i++) {
+        let cell = document.createElement('div');
+        cell.className = `cell position-${i} row-${currentRow}`; // Corrected line
+        board.appendChild(cell);
     }
+    currentRow++;
+}
 
     function createBoard() {
         for (let i = 0; i < 6; i++) {
